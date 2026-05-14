@@ -10,10 +10,14 @@ function Search(){
     useEffect(()=>{
         inputRef.current.focus()
     },[])
-    const handleSearch = () => {
-        if(query.trim()==="") return
-        searchMovies(query)
-    }
+    useEffect(()=>{
+        const timer = setTimeout(()=>{
+            if(query.trim()!==""){
+                searchMovies(query)
+            }
+        },500)
+        return () => clearTimeout(timer)
+    }, [query])
     return (
         <div className="p-6 max-w-6xl mx-auto">
             <h1 className="text-2xl mb-2 font-bold">Search Movies</h1>
@@ -23,13 +27,13 @@ function Search(){
                 type="text"
                 value={query}
                 onChange={(e)=>setQuery(e.target.value)}
-                onKeyDown={(e)=>e.key==="Enter" && handleSearch()}
+                // onKeyDown={(e)=>e.key==="Enter" && handleSearch()}
                 placeholder="Search for a movie..."
                 className="flex-1 px-4 py-3 rounded-lg bg-gray-800 text-white outline-none focus:ring-2 focus:ring-yellow-400"/>
 
-                <button onClick={handleSearch} className="bg-yellow-400 text-black px-6 py-3 rounded-lg font-bold hover:bg-yellow-300 transition">
+                {/* <button onClick={handleSearch} className="bg-yellow-400 text-black px-6 py-3 rounded-lg font-bold hover:bg-yellow-300 transition">
                     Search
-                </button>
+                </button> */}
 
                 {loading && <p className="text-center text-yellow-400">Loading...</p>}
                 {error && <p className="text-center text-red-400">{error}</p>}
